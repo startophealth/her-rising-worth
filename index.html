@@ -63,7 +63,8 @@
   .about{background:var(--sage-soft)}
   .about .inner{display:grid;grid-template-columns:1fr 1.4fr;gap:56px;align-items:center}
   @media(max-width:760px){.about .inner{grid-template-columns:1fr}}
-  .portrait{aspect-ratio:4/5;border-radius:18px;background:linear-gradient(160deg,var(--sage),var(--terracotta));display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;text-align:center;padding:20px}
+  .portrait{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:18px}
+  .portrait-quote{margin-top:26px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;line-height:1.4;color:var(--terracotta);text-align:center;padding:0 10px}
 
   .steps{counter-reset:step}
   .step{display:flex;gap:22px;margin-top:34px;max-width:720px}
@@ -158,7 +159,7 @@
   <div class="blob" style="background:var(--sage);opacity:.16;width:440px;height:400px;top:-80px;left:-140px"></div>
   <div class="blob" style="background:var(--terracotta);opacity:.12;width:480px;height:440px;right:-160px;bottom:-120px"></div>
   <div class="wrap">
-    <div class="eyebrow">Neuroscience-Informed Recovery Coaching</div>
+    <div class="eyebrow" style="max-width:720px;margin:0 auto 14px;line-height:1.9">Neuroscience-Informed Recovery Coaching — from a coach who's helped hundreds of women rise to a higher potential and reclaim themselves</div>
     <h1>You weren't weak.<br>Your brain was <em>wired to survive.</em></h1>
     <p>Healing from a toxic relationship isn't about "just moving on." It's about understanding what your brain learned in order to protect you — and gently rewiring it so you can trust, choose, and rise again.</p>
     <a class="btn" href="https://cal.com/herrisingworth/90-minute-clarity-session" data-cal-link="herrisingworth/90-minute-clarity-session" data-cal-namespace="90-minute-clarity-session" data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'>Book a Clarity Session</a>
@@ -167,7 +168,7 @@
 
 <div class="trust">
   <div class="wrap">
-    <span>Former Mental Health Counselor</span><span class="dot">✦</span><span>Neuroscience-Informed</span><span class="dot">✦</span><span>100% Individualized</span><span class="dot">✦</span><span>1-on-1 Only</span>
+    <span>Trained in Psychology &amp; Counseling</span><span class="dot">✦</span><span>Neuroscience-Informed</span><span class="dot">✦</span><span>100% Individualized</span><span class="dot">✦</span><span>1-on-1 Only</span>
   </div>
 </div>
 
@@ -219,15 +220,27 @@
 
 <section class="section about" id="about">
   <div class="wrap inner">
-    <div class="portrait-wrap"><div class="portrait">"Healing begins the moment you want it for yourself."</div></div>
+    <div><div class="portrait-wrap"><img class="portrait" id="portraitImg" alt="Kourtenay, founder of Her Rising Worth"></div><p class="portrait-quote">"Healing begins the moment you want it for yourself."</p></div>
     <div>
       <div class="eyebrow">About</div>
       <h2>Hi, I'm Kourtenay.</h2>
-      <p style="margin-bottom:14px">I spent years as a mental health counselor working with women navigating self-esteem struggles, toxic relationships, and domestic violence. Again and again I saw the same truth: healing sticks when it's individualized — and when someone finally understands <em>why</em> their brain does what it does.</p>
-      <p>That's why I built Her Rising Worth: coaching that combines counseling experience with brain science, tailored entirely to your story. Not because you're broken — because you're ready.</p>
+      <p style="margin-bottom:14px">I spent 8 years as a mental health counselor working with women navigating self-esteem struggles, toxic relationships, and domestic violence. Again and again I saw the same truth: healing sticks when it's individualized — and when someone finally understands <em>why</em> their brain does what it does.</p>
+      <p>That's why I built Her Rising Worth: coaching that draws on counseling training and brain science, tailored entirely to your story. Not because you're broken — because you're ready.</p>
     </div>
   </div>
 </section>
+
+<script>
+/* Portrait photo loads from two base64 text parts (kept small so deploys stay reliable) */
+(function(){
+  Promise.all(['portrait.b64.a.txt','portrait.b64.b.txt'].map(function(p){
+    return fetch(p).then(function(r){ return r.ok ? r.text() : ''; });
+  })).then(function(t){
+    var b64 = (t[0]+t[1]).replace(/\s+/g,'');
+    if(b64){ document.getElementById('portraitImg').src = 'data:image/webp;base64,' + b64; }
+  }).catch(function(){});
+})();
+</script>
 
 <div style="background:var(--sage-soft)"><div class="pullquote" style="padding:0 24px"><span class="mark">✦</span>What was learned can be relearned.</div></div>
 
@@ -369,8 +382,7 @@ Cal.config.forwardQueryParams = true;
       '<div class="eyebrow">Your result: '+r.label+'</div>'+
       '<h3>'+r.title+'</h3>'+
       '<p>'+r.body+'</p>'+
-      // FORM SERVICE PLACEHOLDER: replace this form\'s handler with your form service
-      // (e.g. Mailchimp / ConvertKit / Formspree) \u2014 post name + email + result label.
+      // Quiz results are submitted to MailerLite \u2014 one embedded form per result group.
       '<form class="quiz-form" id="quizForm">'+
         '<input type="text" name="name" placeholder="First name" required>'+
         '<input type="email" name="email" placeholder="Email address" required>'+
@@ -379,9 +391,32 @@ Cal.config.forwardQueryParams = true;
       '<p class="quiz-note" id="quizNote">Get your full breakdown plus one personalized first step \u2014 no spam, ever.</p>'+
       '<button class="quiz-restart" id="quizRestart">Retake the quiz</button>'+
     '</div>';
+    var ML_FORMS={
+      'Survival Mode':'https://assets.mailerlite.com/jsonp/2496746/forms/192397034699883992/subscribe',
+      'The In-Between':'https://assets.mailerlite.com/jsonp/2496746/forms/192397134865106904/subscribe',
+      'Ready to Rise':'https://assets.mailerlite.com/jsonp/2496746/forms/192397193626256736/subscribe'
+    };
     document.getElementById('quizForm').addEventListener('submit',function(e){
       e.preventDefault();
-      document.getElementById('quizNote').innerHTML='<strong>Thank you!</strong> Email delivery is being set up \u2014 in the meantime, <a href="mailto:startophealth@gmail.com?subject=My%20Quiz%20Result%3A%20'+encodeURIComponent(r.label)+'">email me directly<\/a> and I\u2019ll send your full results personally.';
+      var form=e.target;
+      var btn=form.querySelector('button[type="submit"]');
+      var note=document.getElementById('quizNote');
+      var fd=new FormData();
+      fd.append('fields[name]',form.elements['name'].value);
+      fd.append('fields[email]',form.elements['email'].value);
+      fd.append('ml-submit','1');
+      fd.append('anticsrf','true');
+      btn.disabled=true;btn.textContent='Sending\u2026';
+      fetch(ML_FORMS[r.label],{method:'POST',body:fd})
+        .then(function(res){if(!res.ok)throw new Error('bad status');return res.json().catch(function(){return {};});})
+        .then(function(){
+          form.style.display='none';
+          note.innerHTML='<strong>You\u2019re in!</strong> Your full results are on their way to your inbox \u2014 check your spam folder if you don\u2019t see them in a few minutes.';
+        })
+        .catch(function(){
+          btn.disabled=false;btn.textContent='Send Me My Full Results';
+          note.innerHTML='Hmm, that didn\u2019t go through. Please try again \u2014 or <a href="mailto:startophealth@gmail.com?subject=My%20Quiz%20Result%3A%20'+encodeURIComponent(r.label)+'">email me directly<\/a> and I\u2019ll send your results personally.';
+        });
     });
     document.getElementById('quizRestart').addEventListener('click',function(){step=0;score=0;renderQ();});
   }
