@@ -1,3 +1,8 @@
+---
+name: her-rising-worth-website
+description: How to connect to and update the Her Rising Worth website (herrisingworth.com). Use when asked to edit, deploy, or troubleshoot the site — covers the GitHub repo, deploy process, single-file constraints, Cal.com booking, MailerLite quiz wiring, and legal copy rules.
+---
+
 # SKILL: Update the Her Rising Worth website
 
 Instructions for any Claude (or human) making changes to herrisingworth.com.
